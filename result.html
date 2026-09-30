@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ResumeAI | Analysis Results</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            <span class="logo-icon">✦</span>
+
+            <div>
+                <div class="logo-name">ResumeAI</div>
+                <div class="logo-subtitle">Smart Career Tools</div>
+            </div>
+        </a>
+
+        <div class="nav-badge">
+            AI-Powered Resume Analysis
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="results-page">
+
+    <!-- PAGE HEADER -->
+
+    <section class="results-header">
+
+        <div class="results-header-content">
+
+            <span class="results-label">
+                ANALYSIS COMPLETE
+            </span>
+
+            <h1>
+                Your Resume Analysis
+            </h1>
+
+            <p>
+                We've analyzed your resume against the job description
+                and identified your strengths, gaps, and improvement areas.
+            </p>
+
+            {% if resume_filename %}
+            <div class="resume-file-badge">
+                📄 {{ resume_filename }}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    {% if error %}
+
+    <section class="error-card">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <div>
+            <h2>Analysis Error</h2>
+            <p>{{ error }}</p>
+        </div>
+
+    </section>
+
+    {% else %}
+
+
+    <!-- =====================================================
+         OVERALL SCORE
+    ====================================================== -->
+
+    <section class="overall-score-section">
+
+        <div class="overall-score-card">
+
+            <div class="score-ring"
+     style="--score: {{ overall_score }};">
+
+    <div class="score-ring-inner">
+
+        <span class="score-number">
+            {{ overall_score|round|int }}
+        </span>
+
+        <span class="score-out-of">
+            / 100
+        </span>
+
+    </div>
+
+</div>
+
+            <div class="overall-score-info">
+
+                <span class="score-label">
+                    OVERALL ATS-STYLE SCORE
+                </span>
+
+                <h2>
+                    Resume Compatibility
+                </h2>
+
+                <p>
+                    This score combines your skill match, job-description
+                    similarity, and resume quality.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SCORE CARDS
+    ====================================================== -->
+
+    <section class="score-grid">
+
+        <!-- SKILL MATCH -->
+
+        <div class="metric-card">
+
+            <div class="metric-icon skill-icon">
+                ✓
+            </div>
+
+            <div class="metric-content">
+
+                <span class="metric-label">
+                    SKILL MATCH
+                </span>
+
+                <div class="metric-value">
+                    {{ skill_score|round|int }}%
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill"
+                         style="width: {{ skill_score }}%;">
+                    </div>
+
+                </div>
+
+                <p>
+                    How well your listed skills match the job requirements.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- JOB MATCH -->
+
+        <div class="metric-card">
+
+            <div class="metric-icon job-icon">
+                ◈
+            </div>
+
+            <div class="metric-content">
+
+                <span class="metric-label">
+                    JOB MATCH
+                </span>
+
+                <div class="metric-value">
+                    {{ similarity_score|round|int }}%
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill"
+                         style="width: {{ similarity_score }}%;">
+                    </div>
+
+                </div>
+
+                <p>
+                    Text similarity between your resume and the job description.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUME QUALITY -->
+
+        <div class="metric-card">
+
+            <div class="metric-icon quality-icon">
+                ★
+            </div>
+
+            <div class="metric-content">
+
+                <span class="metric-label">
+                    RESUME QUALITY
+                </span>
+
+                <div class="metric-value">
+                    {{ resume_quality|round|int }}%
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill"
+                         style="width: {{ resume_quality }}%;">
+                    </div>
+
+                </div>
+
+                <p>
+                    Quality based on resume structure and important content.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SKILLS SECTION
+    ====================================================== -->
+
+    <section class="skills-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-label">
+                    SKILL ANALYSIS
+                </span>
+
+                <h2>
+                    Skills Breakdown
+                </h2>
+            </div>
+
+            <p>
+                Compare the skills detected in your resume with the
+                requirements found in the job description.
+            </p>
+
+        </div>
+
+
+        <div class="skills-grid">
+
+
+            <!-- MATCHED SKILLS -->
+
+            <div class="skills-card matched-card">
+
+                <div class="skills-card-header">
+
+                    <div class="skills-title-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Matched Skills
+                        </h3>
+
+                        <span>
+                            {{ matched_skills|length }} skills found
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-tags">
+
+                    {% if matched_skills %}
+
+                        {% for skill in matched_skills %}
+
+                        <span class="skill-tag matched">
+                            ✓ {{ skill }}
+                        </span>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="empty-skills">
+                            No matching skills detected.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- MISSING SKILLS -->
+
+            <div class="skills-card missing-card">
+
+                <div class="skills-card-header">
+
+                    <div class="skills-title-icon missing">
+                        +
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Skills to Improve
+                        </h3>
+
+                        <span>
+                            {{ missing_skills|length }} skills missing
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-tags">
+
+                    {% if missing_skills %}
+
+                        {% for skill in missing_skills %}
+
+                        <span class="skill-tag missing">
+                            + {{ skill }}
+                        </span>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="empty-skills">
+                            No missing skills detected.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOCAL AI REVIEW
+    ====================================================== -->
+
+    <section class="review-section">
+
+        <div class="review-header">
+
+            <div class="review-ai-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <span class="section-label">
+                    INTELLIGENT REVIEW
+                </span>
+
+                <h2>
+                    Local AI Resume Review
+                </h2>
+
+                <p>
+                    Personalized feedback generated from your resume
+                    and job-description analysis.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if ai_review %}
+
+        <!-- EXECUTIVE SUMMARY -->
+
+        {% if ai_review.summary %}
+
+        <div class="review-summary">
+
+            <div class="review-block-icon">
+                ◎
+            </div>
+
+            <div>
+
+                <h3>
+                    Executive Summary
+                </h3>
+
+                <p>
+                    {{ ai_review.summary }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- REVIEW COLUMNS -->
+
+        <div class="review-grid">
+
+
+            <!-- STRENGTHS -->
+
+            {% if ai_review.strengths %}
+
+            <div class="review-card strengths-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-small-icon">
+                        ✓
+                    </div>
+
+                    <h3>
+                        Strengths
+                    </h3>
+
+                </div>
+
+                <ul class="review-list">
+
+                    {% for item in ai_review.strengths %}
+
+                    <li>
+                        <span>✓</span>
+                        <p>{{ item }}</p>
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- WEAKNESSES -->
+
+            {% if ai_review.weaknesses %}
+
+            <div class="review-card weaknesses-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-small-icon">
+                        !
+                    </div>
+
+                    <h3>
+                        Areas to Improve
+                    </h3>
+
+                </div>
+
+                <ul class="review-list">
+
+                    {% for item in ai_review.weaknesses %}
+
+                    <li>
+                        <span>!</span>
+                        <p>{{ item }}</p>
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- SUGGESTIONS -->
+
+            {% if ai_review.suggestions %}
+
+            <div class="review-card suggestions-card">
+
+                <div class="review-card-header">
+
+                    <div class="review-small-icon">
+                        →
+                    </div>
+
+                    <h3>
+                        Suggestions
+                    </h3>
+
+                </div>
+
+                <ul class="review-list">
+
+                    {% for item in ai_review.suggestions %}
+
+                    <li>
+                        <span>→</span>
+                        <p>{{ item }}</p>
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- FALLBACK FOR STRING REVIEW -->
+
+        {% if ai_review is string %}
+
+        <div class="review-text">
+            {{ ai_review }}
+        </div>
+
+        {% endif %}
+
+        {% else %}
+
+        <div class="no-review">
+
+            <div class="no-review-icon">
+                ✦
+            </div>
+
+            <h3>
+                No detailed review available
+            </h3>
+
+            <p>
+                The resume analysis was completed, but no additional
+                review information was generated.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         SCORE CALCULATION
+    ====================================================== -->
+
+    <section class="calculation-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    SCORING METHOD
+                </span>
+
+                <h2>
+                    How Your Score Is Calculated
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="calculation-card">
+
+            <div class="calculation-row">
+
+                <div class="calculation-info">
+
+                    <span>
+                        Skill Match
+                    </span>
+
+                    <small>
+                        50% weight
+                    </small>
+
+                </div>
+
+                <strong>
+                    {{ skill_score|round|int }}%
+                </strong>
+
+            </div>
+
+
+            <div class="calculation-row">
+
+                <div class="calculation-info">
+
+                    <span>
+                        Job Description Match
+                    </span>
+
+                    <small>
+                        30% weight
+                    </small>
+
+                </div>
+
+                <strong>
+                    {{ similarity_score|round|int }}%
+                </strong>
+
+            </div>
+
+
+            <div class="calculation-row">
+
+                <div class="calculation-info">
+
+                    <span>
+                        Resume Quality
+                    </span>
+
+                    <small>
+                        20% weight
+                    </small>
+
+                </div>
+
+                <strong>
+                    {{ resume_quality|round|int }}%
+                </strong>
+
+            </div>
+
+
+            <div class="calculation-total">
+
+                <span>
+                    Overall Score
+                </span>
+
+                <strong>
+                    {{ overall_score|round|int }}/100
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACTIONS
+    ====================================================== -->
+
+    <section class="result-actions">
+
+        <a href="/" class="primary-result-button">
+            ↻ Analyze Another Resume
+        </a>
+
+        <p>
+            Improve your resume using the feedback above and run
+            another analysis to compare your results.
+        </p>
+
+    </section>
+
+
+    {% endif %}
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+
+                <div>
+                    <div class="logo-name">ResumeAI</div>
+                    <div class="logo-subtitle">
+                        Smart Career Tools
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                Build a resume that gets noticed.
+            </p>
+
+        </div>
+
+
+        <div class="footer-tech">
+
+            <span>Python</span>
+            <span>Flask</span>
+            <span>NLP</span>
+            <span>Machine Learning</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 ResumeAI. Built for smarter career preparation.
+
+    </div>
+
+</footer>
+
+</body>
+</html>

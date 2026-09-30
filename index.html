@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ResumeAI | Smart Resume Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+
+            <span class="logo-icon">
+                ✦
+            </span>
+
+            <div>
+
+                <div class="logo-name">
+                    ResumeAI
+                </div>
+
+                <div class="logo-subtitle">
+                    Smart Career Tools
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <div class="nav-badge">
+            AI-Powered Resume Analysis
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     HERO SECTION
+========================================================= -->
+
+<main>
+
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-label">
+            AI-POWERED RESUME ANALYSIS
+        </span>
+
+
+        <h1>
+            Build a Resume
+            <br>
+            That Gets <span>Noticed.</span>
+        </h1>
+
+
+        <p>
+            Analyze your resume against any job description.
+            Discover your skill match, improve your resume quality,
+            and get actionable career suggestions.
+        </p>
+
+
+        <div class="hero-points">
+
+            <span>
+                ✓ Skill Analysis
+            </span>
+
+            <span>
+                ✓ Job Matching
+            </span>
+
+            <span>
+                ✓ Smart Suggestions
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ANALYZER SECTION
+========================================================= -->
+
+<section class="analyzer-section">
+
+    <div class="analyzer-card">
+
+
+        <!-- HEADER -->
+
+        <div class="analyzer-header">
+
+            <div>
+
+                <span class="section-label">
+                    RESUME ANALYZER
+                </span>
+
+                <h2>
+                    Analyze Your Resume
+                </h2>
+
+                <p>
+                    Upload your resume and paste the job description
+                    to get a detailed compatibility analysis.
+                </p>
+
+            </div>
+
+
+            <div class="analyzer-icon">
+                ✦
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form action="/analyze"
+              method="POST"
+              enctype="multipart/form-data">
+
+
+            <!-- RESUME UPLOAD -->
+
+            <div class="form-group">
+
+                <label for="resume">
+                    Upload Resume
+                </label>
+
+
+                <div class="upload-box">
+
+                    <input
+                        type="file"
+                        id="resume"
+                        name="resume"
+                        accept=".pdf,.docx"
+                        required
+                    >
+
+
+                    <label for="resume"
+                           class="upload-content">
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Choose your resume
+                            </strong>
+
+                            <span>
+                                PDF or DOCX • Maximum 5 MB
+                            </span>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+
+                <div id="file-name"
+                     class="file-name">
+
+                    No file selected
+
+                </div>
+
+            </div>
+
+
+
+            <!-- JOB DESCRIPTION -->
+
+            <div class="form-group">
+
+                <div class="label-row">
+
+                    <label for="job_description">
+                        Job Description
+                    </label>
+
+                    <span>
+                        Required
+                    </span>
+
+                </div>
+
+
+                <textarea
+                    id="job_description"
+                    name="job_description"
+                    rows="10"
+                    placeholder="Paste the job description here...
+
+Example:
+We are looking for a Software Engineer with knowledge of Python, Java, SQL, Data Structures, Git and REST APIs..."
+                    required
+                ></textarea>
+
+
+                <div class="textarea-hint">
+                    Paste the complete job description for better matching results.
+                </div>
+
+            </div>
+
+
+
+            <!-- SUBMIT -->
+
+            <div class="form-submit">
+
+                <button
+                    type="submit"
+                    class="analyze-button"
+                >
+
+                    <span>
+                        Analyze My Resume
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <p>
+                    Your resume is analyzed locally and is not permanently stored.
+                </p>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FEATURES
+========================================================= -->
+
+<section class="features-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                WHAT YOU GET
+            </span>
+
+            <h2>
+                Everything You Need to Improve Your Resume
+            </h2>
+
+        </div>
+
+        <p>
+            ResumeAI analyzes the most important parts of your
+            resume and gives you practical feedback.
+        </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+
+        <!-- FEATURE 1 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ◈
+            </div>
+
+            <h3>
+                ATS-Style Score
+            </h3>
+
+            <p>
+                Get an overall compatibility score based on
+                skills, job matching, and resume quality.
+            </p>
+
+        </div>
+
+
+
+        <!-- FEATURE 2 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ✓
+            </div>
+
+            <h3>
+                Skill Analysis
+            </h3>
+
+            <p>
+                Identify the skills you already have and discover
+                important skills missing from your resume.
+            </p>
+
+        </div>
+
+
+
+        <!-- FEATURE 3 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ★
+            </div>
+
+            <h3>
+                Resume Quality
+            </h3>
+
+            <p>
+                Check important resume sections such as education,
+                projects, skills, experience, and certifications.
+            </p>
+
+        </div>
+
+
+
+        <!-- FEATURE 4 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ✦
+            </div>
+
+            <h3>
+                Smart Suggestions
+            </h3>
+
+            <p>
+                Receive personalized improvement suggestions based
+                on your resume and target job description.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     HOW IT WORKS
+========================================================= -->
+
+<section class="process-section">
+
+    <div class="section-heading process-heading">
+
+        <div>
+
+            <span class="section-label">
+                SIMPLE PROCESS
+            </span>
+
+            <h2>
+                How ResumeAI Works
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="process-grid">
+
+
+        <!-- STEP 1 -->
+
+        <div class="process-card">
+
+            <div class="step-number">
+                01
+            </div>
+
+            <div>
+
+                <h3>
+                    Upload Resume
+                </h3>
+
+                <p>
+                    Upload your resume in PDF or DOCX format.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STEP 2 -->
+
+        <div class="process-card">
+
+            <div class="step-number">
+                02
+            </div>
+
+            <div>
+
+                <h3>
+                    Add Job Description
+                </h3>
+
+                <p>
+                    Paste the job description you're targeting.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STEP 3 -->
+
+        <div class="process-card">
+
+            <div class="step-number">
+                03
+            </div>
+
+            <div>
+
+                <h3>
+                    Analyze
+                </h3>
+
+                <p>
+                    ResumeAI compares your resume with the job.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STEP 4 -->
+
+        <div class="process-card">
+
+            <div class="step-number">
+                04
+            </div>
+
+            <div>
+
+                <h3>
+                    Improve
+                </h3>
+
+                <p>
+                    Use the results and suggestions to improve your resume.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TECHNOLOGY SECTION
+========================================================= -->
+
+<section class="technology-section">
+
+    <div class="technology-card">
+
+        <div>
+
+            <span class="section-label">
+                BUILT WITH
+            </span>
+
+            <h2>
+                Simple Technology. Powerful Analysis.
+            </h2>
+
+            <p>
+                ResumeAI combines Python, Flask, natural language
+                processing techniques, and machine learning algorithms
+                to analyze your resume.
+            </p>
+
+        </div>
+
+
+        <div class="technology-tags">
+
+            <span>Python</span>
+
+            <span>Flask</span>
+
+            <span>NLP</span>
+
+            <span>Scikit-learn</span>
+
+            <span>TF-IDF</span>
+
+            <span>Machine Learning</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+
+        <div class="footer-brand">
+
+            <div class="logo">
+
+                <span class="logo-icon">
+                    ✦
+                </span>
+
+                <div>
+
+                    <div class="logo-name">
+                        ResumeAI
+                    </div>
+
+                    <div class="logo-subtitle">
+                        Smart Career Tools
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p>
+                Build a resume that gets noticed.
+            </p>
+
+        </div>
+
+
+
+        <div class="footer-tech">
+
+            <span>
+                Python
+            </span>
+
+            <span>
+                Flask
+            </span>
+
+            <span>
+                NLP
+            </span>
+
+            <span>
+                Machine Learning
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        © 2026 ResumeAI.
+        Built for smarter career preparation.
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
